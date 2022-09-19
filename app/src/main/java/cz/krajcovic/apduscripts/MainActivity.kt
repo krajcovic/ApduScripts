@@ -16,24 +16,29 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import cz.krajcovic.apduscripts.data.ApduMessage
+import cz.krajcovic.apduscripts.models.ApduMessagesFactory
 import cz.krajcovic.apduscripts.ui.theme.ApduScriptsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SwitchPreview(2)
-
+            SwitchPreview(DEFAULT_PREVIEW)
         }
+    }
+
+    companion object {
+        const val DEFAULT_PREVIEW = 2
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SwitchPreview(previewVersion: Int = 3) {
+fun SwitchPreview(previewVersion: Int = MainActivity.DEFAULT_PREVIEW) {
     when (previewVersion) {
         1 -> TestTextContent()
-        2 -> MessageCard(name = "Dusan")
+        2 -> MessageCard(ApduMessagesFactory.getFake())
         3 -> JetpackCompose()
         else -> CreateDefaultContent()
     }
@@ -50,11 +55,14 @@ fun TestTextContent() {
 fun JetpackCompose() {
     ApduScriptsTheme {
         Card {
-            val expander by remember { mutableStateOf(false) }
-            Column(Modifier.clickable { expander != expander }) {
-//            Image(painterResource(R.drawable.jetpack_compose_icon))
-                AnimatedVisibility(visible = expander) {
-                    Text(text = "Jetpack compose", style = MaterialTheme.typography.h2)
+            val expanded by remember { mutableStateOf(false) }
+            Column(Modifier.clickable { expanded != expanded }) {
+                Image(painterResource(R.drawable.jetpack_compose_icon), "")
+                AnimatedVisibility(expanded) {
+                    Text(
+                        text = "Jetpack compose",
+                        style = MaterialTheme.typography.h2
+                    )
                 }
 
             }
@@ -70,12 +78,12 @@ fun CreateDefaultContent() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            MessageCard("Android")
+            MessageCard(ApduMessagesFactory.getFake())
         }
     }
 }
 
 @Composable
-fun MessageCard(name: String) {
-    Text(text = "Hello $name!")
+fun MessageCard(apduMessage: ApduMessage) {
+    Text(text = "APDU: ${apduMessage.name}")
 }

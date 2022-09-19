@@ -52,7 +52,7 @@ fun JetpackCompose() {
         Card {
             val expander by remember { mutableStateOf(false) }
             Column(Modifier.clickable { expander != expander }) {
-            Image(painterResource(R.drawable.jetpack_compose_icon))
+//            Image(painterResource(R.drawable.jetpack_compose_icon))
                 AnimatedVisibility(visible = expander) {
                     Text(text = "Jetpack compose", style = MaterialTheme.typography.h2)
                 }

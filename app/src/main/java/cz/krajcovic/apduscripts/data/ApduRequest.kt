@@ -1,5 +1,7 @@
 package cz.krajcovic.apduscripts.data
 
+import cz.krajcovic.apduscripts.decorators.toHexString
+
 /**
  * Příkaz APDU
  */
@@ -56,5 +58,10 @@ data class ApduRequest(
         result = 31 * result + le
         return result
     }
+
+    override fun toString(): String {
+        return "ApduRequest(cla=${cla.toHexString()}, ins=${ins.toHexString()}, p1=${p1.toHexString()}, p2=${p2.toHexString()}, lc=$lc[$lc.], nc=${nc.toHexString()}, le=$le)"
+    }
+
 
 }
